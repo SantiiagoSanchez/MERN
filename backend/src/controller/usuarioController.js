@@ -20,14 +20,27 @@ usuarioCtrl.postUser = async(req, res) =>{
     await newUser.save({message: "El usuario se creo correctamente"});
 }
 
-usuarioCtrl.getUser = async(req, res) =>{
-    
+usuarioCtrl.getUserbyId = async(req, res) =>{
+    const usuario = await Usuario.findById(req.params.id) //En nuestro modelo buscamos por id
+    res.json(usuario)
 }
 
-usuarioCtrl.getUser = async(req, res) =>{
-    
+usuarioCtrl.deleteUser = async(req, res) =>{
+    await Usuario.findByIdAndDelete(req.params.id)
+    res.json({message: "El usuario ha sido eliminado"})
 }
 
-usuarioCtrl.getUser = async(req, res) =>{
-    
+usuarioCtrl.putUser = async(req, res) =>{
+    const {nombre, apellido, correo, telefono, edad} = req.body;
+    await Usuario.findByIdAndUpdate(req.params.id, {
+        nombre,
+        apellido,
+        edad,
+        correo,
+        telefono
+    })
+
+    res.json({message: "El usuario ha sido actualizo"})
 }
+
+module.exports = usuarioCtrl;
