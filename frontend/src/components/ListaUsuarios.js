@@ -1,5 +1,6 @@
 import React, { useEffect, useState }  from "react"
 import axios from "axios"
+import {Link} from 'react-router-dom'
 
 const ListaUsuarios = () => {
 
@@ -12,7 +13,11 @@ const ListaUsuarios = () => {
             setLista(res.data) //Data tiene todos los datos de nuestra API
         }
         getUsuarios();
-    },[lista]) 
+    },[lista])
+
+    const eliminarUsuario = async (id) =>{
+        await axios.delete(`http://localhost:4000/api/usuarios/${id}`)
+    }
 
 return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
@@ -38,11 +43,14 @@ return (
 
                 {/* Footer */}
                 <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end bg-white/50 dark:bg-gray-800/50">
-                    <button
-                        className="bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-lg transition duration-300 shadow-md hover:shadow-lg"
-                    >
-                        Eliminar
-                    </button>
+                    <div className="flex space-x-4">
+                        <button className="bg-red-400 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-lg transition duration-300 shadow-md hover:shadow-lg" onClick={()=>{eliminarUsuario(list._id)}}>
+                            Eliminar
+                        </button>
+                        <Link className="bg-yellow-400 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-lg transition duration-300 shadow-md hover:shadow-lg" to={`/EditarUsuario/${list._id}`}>
+                            Editar
+                        </Link>
+                    </div>
                 </div>
             </div>
         ))}

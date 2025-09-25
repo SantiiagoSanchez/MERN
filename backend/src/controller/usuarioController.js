@@ -17,7 +17,8 @@ usuarioCtrl.postUser = async(req, res) =>{
         correo: correo,
     })
 
-    await newUser.save({message: "El usuario se creo correctamente"});
+    await newUser.save();
+    res.status(201).json({ message: "El usuario se creó correctamente" });
 }
 
 usuarioCtrl.getUserbyId = async(req, res) =>{

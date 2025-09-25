@@ -6,8 +6,8 @@ const CrearUsuarios = () => {
     const valorInicial = {
         nombre: '',
         apellido: '',
-        edad: 18,
-        telefono:0,
+        edad: '',
+        telefono:'',
         correo: ''
 
     }
@@ -28,18 +28,15 @@ const guardarDatos = async (e) => {
     const newUser = {
         nombre: usuario.nombre,
         apellido: usuario.apellido,
-        edad: usuario.edad,
-        telefono: usuario.telefono,
+        edad: parseInt(usuario.edad),
+        telefono: parseInt(usuario.telefono),
         correo: usuario.correo
     };
 
     try {
         await axios.post('http://localhost:4000/api/usuarios', newUser);
         setUsuario({ ...valorInicial });
-        setMensajeExito(true);
-
-        // Oculta el mensaje después de 4 segundos
-        setTimeout(() => setMensajeExito(false), 4000);
+        console.log("Formulario reseteado:", valorInicial);
     } catch (error) {
         console.error("Error al guardar el usuario", error);
     }
@@ -52,11 +49,6 @@ const guardarDatos = async (e) => {
             <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-8 tracking-wide">
                 Crear Usuario
             </h2>
-            {mensajeExito && (
-                <div className="mb-6 text-green-800 bg-green-100 dark:bg-green-900 dark:text-green-100 border border-green-300 dark:border-green-700 px-4 py-3 rounded-lg shadow-md transition-all duration-300">
-                    ✅ Usuario creado correctamente.
-                </div>
-            )}
             <form onSubmit={guardarDatos} className="space-y-5">
                 {/* Nombre */}
                 <div>
