@@ -41,7 +41,7 @@ usuarioCtrl.putUser = async(req, res) =>{
         telefono
     })
 
-    res.json({message: "El usuario ha sido actualizo"})
+    res.status(201).json({ message: "El usuario se creó correctamente" });
 }
 
 module.exports = usuarioCtrl;

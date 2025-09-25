@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navegacion from './components/navegacion';
 import ListaUsuarios from './components/ListaUsuarios';
 import CrearUsuarios from './components/CrearUsuarios';
+import EditarUsuarios from './components/EditarUsuarios'
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ListaUsuarios />} />
           <Route path="/CrearUsuario" element={<CrearUsuarios />} />
-          <Route path="/EditarUsuario/:id" element={<ListaUsuarios />} />
+          <Route path="/EditarUsuario/:id" element={<EditarUsuarios />} />
         </Routes>
       </div>
     </div>

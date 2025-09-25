@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios'
+import { useParams, useNavigate } from "react-router-dom";
 
-const CrearUsuarios = () => {
+const EditarUsuarios = () =>{
 
     const valorInicial = {
         nombre: '',
@@ -9,46 +10,71 @@ const CrearUsuarios = () => {
         edad: '',
         telefono:'',
         correo: ''
-
+    
     }
 
-    const [usuario, setUsuario] = useState(valorInicial) //Nos permite crear una variable de estado, para poder almacenar informacion dentro de la variable.
+    const navigate = useNavigate(); 
+    
+    const [usuario, setUsuario] = useState(valorInicial)
 
+
+    let {id} = useParams(); //Capturar el parametro que estamos recibiendo por la url
+    const [iduser, setnuevousuario] = useState(id)
+
+    //Metodo para actualizar el usuario
+
+    const actualizarUsuario = async(e) =>{
+        e.preventDefault(); // Evita que la pagina se recargue
+
+        const newUser = {
+            nombre: usuario.nombre,
+            apellido: usuario.apellido,
+            edad: parseInt(usuario.edad),
+            telefono: parseInt(usuario.telefono),
+            correo: usuario.correo
+        }
+
+        try
+        {
+            await axios.put(`http://localhost:4000/api/usuarios/${iduser}`, newUser) //Id user tiene el id que capturamos.
+            setUsuario(valorInicial)
+            navigate('/')
+        } 
+        catch (error) {
+            console.error("Error al guardar el usuario", error);
+        }
+    }
 
     const capturarDatos = (e) =>{
         const {name, value} = e.target
         setUsuario({...usuario, [name]: value})
     }
 
-
-const guardarDatos = async (e) => {
-    e.preventDefault(); // Evita que la pagina se recargue
-
-    const newUser = {
-        nombre: usuario.nombre,
-        apellido: usuario.apellido,
-        edad: parseInt(usuario.edad),
-        telefono: parseInt(usuario.telefono),
-        correo: usuario.correo
-    };
-
-    try {
-        await axios.post('http://localhost:4000/api/usuarios', newUser);
-        setUsuario({ ...valorInicial });
-        console.log("Formulario reseteado:", valorInicial);
-    } catch (error) {
-        console.error("Error al guardar el usuario", error);
+    //Logica para hacer la peticion a la API.
+    const obtenerUno = async(id) =>{
+        const res = await axios.get(`http://localhost:4000/api/usuarios/${id}`)
+        setUsuario({
+            nombre : res.data.nombre,
+            apellido : res.data.apellido,
+            edad : parseInt(res.data.edad),
+            telefono : parseInt(res.data.telefono),
+            correo : res.data.correo
+        })
     }
-};
 
+    useEffect(() => {
+        if(iduser !== ''){
+            obtenerUno(iduser)
+        }
+    },[iduser])
 
     return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-gray-900 dark:to-gray-800 p-6">
         <div className="w-full max-w-lg bg-white/30 dark:bg-gray-800/40 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
             <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-8 tracking-wide">
-                Crear Usuario
+                Editar Usuario
             </h2>
-            <form onSubmit={guardarDatos} className="space-y-5">
+            <form onSubmit={actualizarUsuario} className="space-y-5">
                 {/* Nombre */}
                 <div>
                     <label className="block text-gray-700 dark:text-gray-300 mb-1">Nombre:</label>
@@ -124,12 +150,12 @@ const guardarDatos = async (e) => {
                     type="submit"
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300"
                 >
-                    Guardar Usuario
+                    Guardar Cambios
                 </button>
             </form>
         </div>
     </div>
 );
-};
+}
 
-export default CrearUsuarios;
+export default EditarUsuarios;
