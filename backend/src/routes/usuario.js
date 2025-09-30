@@ -1,19 +1,23 @@
-const {Router} = require('express')
-const router = Router()
+const { Router } = require('express');
+const router = Router();
 
-//Router es una función de express que te permite crear un nuevo manejador de rutas. Se utiliza para organizar mejor las rutas de tu aplicación, en vez de definir todo en un solo archivo, puedes tener diferentes archivos por módulo
+const {
+  getUsers,
+  createUser,
+  getUserById,
+  deleteUser,
+  updateUser
+} = require('../controller/usuarioController');
 
-const {getUser, postUser, getUserbyId, deleteUser, putUser} = require('../controller/usuarioController')
-
+// Ruta raíz
 router.route('/')
+  .get(getUsers)
+  .post(createUser);
 
-    .get(getUser)
-    .post(postUser)
-
+// Ruta con ID
 router.route('/:id')
+  .get(getUserById)
+  .delete(deleteUser)
+  .put(updateUser);
 
-    .get(getUserbyId)
-    .delete(deleteUser)
-    .put(putUser)
-
-module.exports = router //Podemos utilizar este archivo en otra parte del proyecto, por eso lo exportamos
+module.exports = router;
